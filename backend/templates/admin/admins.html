@@ -1,0 +1,109 @@
+{% extends 'admin/layout.html' %}
+
+{% block title %}Connected User{% endblock title %}
+
+{% block style %}
+
+
+<!-- DataTables CSS (Optional, for styling) -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
+
+{% endblock style %}
+{% block body %}
+    <!-- Modal -->
+    <form action="{{url_for('admin.delete_admin')}}" id="deleteForm" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" value="" id="userID" name="id">
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this user? <br><span class="text-danger">This action cannot be undone.</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-11 mt-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-11 mt-3">
+            <a href="{{url_for('admin.index')}}" class="btn btn-md btn-outline-warning mb-3">Return</a>
+            <a href="{{url_for('admin.add_user')}}" class="btn btn-md btn-outline-primary mb-3">Add User</a>
+            <div class="card">
+                <div class="card-header">
+                    Connected User
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <!-- <th>Code</th> -->
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Last IP</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email}}</td>
+                                <td>{{ user.password[:7] }} <span class="text-danger">. . .</span> {{ user.password[-10:]}}</td>
+                                <td>{{ user.last_ip }}</td>
+                                <td>
+                                    <button href="#" class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body%}
+{% block script %}
+<!-- DataTables JavaScript -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable({
+            scrollY: "30vh",
+        });
+
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var id = button.closest('tr').find('td:first').text()
+            $('#userID').val(id)
+        })
+    });
+</script>
+{% endblock script%}

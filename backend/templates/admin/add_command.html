@@ -1,0 +1,70 @@
+{% extends 'admin/layout.html'%}
+
+{% block title %}Add Command{% endblock title %}
+{% block body %}
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-11 mt-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-11 mb-5">
+            <a href="{{url_for('admin.index')}}" class="btn btn-md btn-outline-warning mb-3">Return</a>
+            <form action="" method="POST">
+                <div class="card">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <div class="card-header">
+                        Add Command
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="" class="">Keyword</label>
+                                {% if keyword %}
+                                    <input type="text" class="form-control border border-danger" name="keyword" value="{{keyword}}" required>
+                                {% else %}
+                                    <input type="text" class="form-control" name="keyword" required>
+                                {% endif %}
+                                
+                            </div>
+                            <div class="col-md-3">
+
+                            </div>
+                            <div class="col-md-5">
+                                <label for="">Expired | <small>Leave empty for permanent command.</small></label>
+
+                                {% if expired_date %}
+                                    <input type="date" class="form-control" name="expired_date" value="{{expired_date}}">
+                                {% else %}
+                                    <input type="date" class="form-control" name="expired_date">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label for="">Message</label>
+                                {% if message %}
+                                    <textarea id="" cols="30" rows="10" class="form-control" name="message">{{message}}</textarea>
+                                {% else %}
+                                    <textarea id="" cols="30" rows="10" class="form-control" name="message"></textarea>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <button type="submit" class="btn btn-md btn-outline-primary">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock body %}

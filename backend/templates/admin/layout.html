@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.0.9/css/boxicons.min.css">
+    {% block style %}{% endblock style %}
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+            <a class="navbar-brand" href="{{url_for('admin.index')}}">Dashboard | PPTI 15</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample09"
+                aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id="navbarsExample09">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('admin.index')}}">Command</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('admin.connected_user')}}">Connected User</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('admin.admins')}}">Admins</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Config</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('admin.about_bot')}}">About Bot</a>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-md-0">
+                    <!-- <input class="form-control" type="text" placeholder="Search" aria-label="Search"> -->
+                    <a href="#" class="btn btn-sm btn-outline-info mr-2">Change Profile</a>
+                    <a href="{{ url_for('admin.change_password') }}" class="btn btn-sm btn-outline-success mr-2">Change Password</a>
+                    <a href="{{ url_for('main.logout') }}" class="btn btn-sm btn-outline-danger">Logout</a>
+                </form>
+            </div>
+        </nav>
+            {% block body %}
+            {% endblock body %}
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+{% block script %}
+{% endblock script  %}
+
+<script>
+    $(document).ready(function () {
+        // get current URL path and assign 'active' class
+        var pathname = window.location.pathname.split('/');
+        pathname = pathname[pathname.length - 1];
+
+        // remove existing 'active' class from all nav items
+        $('.navbar-nav .nav-item').removeClass('active');
+
+        // add 'active' class to the corresponding nav item
+
+        if (pathname == ''){
+            $('.navbar-nav .nav-item:first-child').addClass('active');
+        }
+        $('.navbar-nav .nav-item a[href*="' + pathname + '"]').closest('li').addClass('active');
+    });
+</script>
+
+</html>
